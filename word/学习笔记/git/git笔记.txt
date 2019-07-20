@@ -1,0 +1,90 @@
+安装完成后git的最后一步设置
+$ git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+
+---命令介绍----
+git init ======== 把这个目录变成Git可以管理的仓库
+git add 文件名 =======	把文件添加到仓库的暂存区,(成功没有消息)
+git commit -m "提交说明" ====== 把文件提交到本地仓库
+git status ========= 查看是否还有未提交的文件
+git diff ====== 查看具体修改了什么内容
+git log ====== 显示从最近到最远的提交日志
+git log --pretty=oneline ====== 简洁方式查看提交的日志
+git reset --hard HEAD^ ======= 回退到上个版本(上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100)
+#如果回退到上个版本，当前版本就会是这个版本，之前的版本都不会存在，需要想要在恢复过来，需要找个之前的commit id
+git reset --hard 6037a64e36f0a3144c833dccb1d3b068fe033164 == 恢复到某个版本记录
+#如果忘记了想要恢复的版本号，需要使用命令
+git reflog ======记录了你的每一次更新版本的命令
+git checkout -- 文件名 ==== 把工作区修改的文件内容全部撤销（还原成和版本库一样的状态），适用于文件还没有放到暂缓区
+git reset HEAD 文件名 ===== 把暂存区的修改回退到工作区(就是放弃执行git add)
+git rm 文件名 ====== 删除版本库的文件(手动删除了工作区的文件，也要从版本库中删除该文件，那就用命令git rm删掉，并且git commit再提交)
+git checkout -- 文件名 ===== 误删除工作区的文件可以用这个命令从版本库还原回来
+
+-----github操作---------
+ssh-keygen -t rsa -C "youremail@example.com"  ==== 生成秘钥
+#然后在GitHub上 settings --> SSH and GPG keys 里添加秘钥(在自己的用户目录下的id_rsa.pub公钥内容粘贴上去)
+#新建仓库后使用命令上传文件到GitHub 
+git remote add origin https://github.com/243662875/git.git，=== 关联一个远程库，远程库的名字就是origin
+git push -u origin master	=== 第一次把本地库的内容推送到github需要加上-u，完成后就可以在github上查看自己的内容
+git push origin master  === 以后提交都可以通过这个命令开始推送(master是分支名,也可以提交其他的分支)
+git remote == 查看远程仓库名加上 -v 显示更详细的信息
+##分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在，也就是有没有联网都可以正常工作，而SVN在没有联网的时候是拒绝干活的！当有网络的时候，再把本地提交推送一下就完成了同步
+git clone git@github.com:michaelliao/gitskills.git === 把文件克隆到本地
+
+git remote rm origin == 删除已有的远程库名
+
+----分支管理---------
+git branch dev  === 创建分支dev分支
+git checkout -b dev === 创建dev分支并切换到dev分支
+git branch === 查看当前分支
+git checkout master === 切换到master分支，切换分支后会发现之前在dev分支修改的内容全部都没有了
+git merge dev === 把dev分支的工作成果合并到master分支上(git merge命令用于合并指定分支到当前分支)
+git branch -d dev === 删除dev分支
+
+#当Git无法自动合并分支时，就必须首先解决冲突。解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+#对于冲突的文件 可以直接查看 cat 冲突文件名，会提示不一样的部分，Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
+git log --graph --pretty=oneline --abbrev-commit  == 查看分支提交图
+
+----分支管理策略---
+通常情况合并分支时，Git会用Fast forward模式，但这种模式下，删除分支后,会删除合并分支视图，所以建议禁用Fast forward模式
+git merge --no-ff -m "merge with no-ff" dev == 准备合并dev分支时,加上--no-ff参数,禁用Fast forward
+
+在实际开发中，我们应该按照几个基本原则进行分支管理：
+1、master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+2、那在哪干活呢？干活都在分支上，也就是说，分支是不稳定的，到某个时候，比如1.0版本发布时，再把分支合并到master上，在master分支发布1.0版本；
+3、你和你的小伙伴们每个人都在分支上干活，每个人都有自己的分支，时不时地往分支上合并就可以了
+
+#你现在正在dev分支上的新增的功能还没有完成,又有个之前的bug需要修复,需要先把当前工作存储起来
+git stash == 把当前工作现场“储藏”起来，等以后恢复现场后继续工作，需要先执行（git add *）添加到储存区才能执行这个命令
+#这个时候需要回到master分支上，创建个bug分支来修复bug，修复完成后再提交到版本库，然后回到master分支合并bug分支
+#合并完成后，回到dev继续之前的工作，需要把存储的内容恢复过来，
+git stash list == 查看存储的记录
+git stash pop  == 恢复之前存储的内容，同时会把之前的记录也删了
+git stash apply == 恢复后，stash内容并不删除需要用 git stash drop 删除记录
+
+总结：修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
+当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
+
+git branch -D 分支名 == 强制删除一个没有合并过的分支
+
+-----多人协作---
+git checkout -b dev origin/dev == 创建远程origin的dev分支到本地
+#如果你的小伙伴的最新提交和你试图推送的提交有冲突，解决办法也很简单，先用git pull把最新的提交从origin/dev抓下来，然后在本地合并，解决冲突，再推送：
+git branch --set-upstream-to=origin/dev dev == 把本地dev分支与远程origin/dev分支的链接
+git pull == 推送失败，是因为远程分支比你的本地的版本高，需要先用git pull试图合并，合并后要先解决冲突，然后在提交版本库
+
+git rebase == 可以把本地未push的分叉提交历史整理成直线,目的是使得我们在查看历史提交的变化时更容易
+
+---标签管理----
+git tag v1.0 == 创建标签，默认是打在最新提交的commit上的
+git tag v0.9 f52c633 == 如果忘了打标签，可以找到对应的commit id 打上标签
+git show v1.0 == 查看这个标签的信息
+git tag -a v0.1 -m "version 0.1 released" 1094adb == 创建带有说明的标签，用-a指定标签名，-m指定说明文字
+git tag ==  查看所有标签名
+git tag -d v0.1 == 删除本地库的标签
+git push origin v1.0 == 把标签推送到远程库,创建的标签是只存储在本地,不会自动推送到远程
+git push origin --tags == 一次性推送全部尚未推送到远程库的本地标签
+git push origin :refs/tags/<标签名> == 如果想要删除远程库的标签,需要先删除本地库,然后执行这条命令
+
+解决git输错密码问题
+https://blog.csdn.net/u013654125/article/details/80511789

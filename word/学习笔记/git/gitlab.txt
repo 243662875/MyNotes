@@ -1,0 +1,42 @@
+一、搭建git服务器
+使用contos7.5
+安装好git后,创建git用户,用来运行git服务
+useradd -s /usr/bin/git-shell git
+
+创建证书,并设置属主为git
+cd /home/git/.ssh   #进入git用户家目录
+touch authorized_keys #创建授权认证文件,把客户端的公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个
+chown -R git.git .ssh
+chmod 600 .ssh/authorized_keys
+
+然后找个存储git仓库的目录,初始化仓库
+mkdir /data/git -p && cd /data/git
+git init --bare sample.git		#初始化仓库
+chown -R git.git sample.git  #创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以.git结尾
+
+以上服务器端就完成了，剩下的就是在各自的电脑上克隆远程仓库,然后推送到服务器
+git clone git@ip:/data/git/sample.git
+
+二、gitlab安装
+可参考：https://blog.csdn.net/likai503819723/article/details/79704841
+https://blog.csdn.net/zerokkqq/article/details/79736601
+https://www.cnblogs.com/zhujingzhi/p/9703457.html#_label5_0
+
+yum install curl openssh-server openssh-clients postfix 
+yum -y install policycoreutils openssh-server openssh-clients postfix
+yum install lokkit
+service postfix start
+
+gitlab安装包下载地址：https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/
+https://packages.gitlab.com/gitlab/gitlab-ce
+rpm -ivh gitlab-ce-10.0.0-ce.0.el7.x86_64.rpm
+
+修改gitlab配置文件,指定服务器ip和端口
+vim  /etc/gitlab/gitlab.rb
+external_url http://ip:prot
+
+然后重置并启动
+gitlab-ctl reconfigure
+gitlab-ctl restart
+
+初始账户: root 密码:

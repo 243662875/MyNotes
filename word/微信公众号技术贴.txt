@@ -1,0 +1,52 @@
+Mysql+Mycat实现数据库主从同步与读写分离：
+https://mp.weixin.qq.com/s?__biz=MzI0MDQ4MTM5NQ==&mid=2247485333&idx=1&sn=71a60b1deb210100623b6fe120ab867b&chksm=e91b6289de6ceb9fa70aa0ba50b15420e0b4f6e93aed956882801150d81b98d73ca9234f1268&mpshare=1&scene=23&srcid=0518613UuqxpBSXUuReMvbI6#rd
+运维角度浅谈MySQL数据库优化
+https://mp.weixin.qq.com/s/2txlWEyGAd30UCty-y05ZA
+Linux 笔试题
+https://mp.weixin.qq.com/s/cbbT7caxj58DHNW1qXaWLA
+使用elk beats的packetbeat来进行MySQL的网络抓包审计
+https://mp.weixin.qq.com/s/oInYqm_P7tMeMqitfjQXfg
+Linux 运维人员最常用 150 个命令汇总
+https://mp.weixin.qq.com/s/gWywn4MGM1z1uu4eh5a2GQ
+必须要知道的30个工具
+https://mp.weixin.qq.com/s/97Gs7hzhtlO3a66D8kKq_A
+nginx+tomcat+redis
+https://www.cnblogs.com/sunshine052697/p/8573965.html
+版本控制
+https://www.cnblogs.com/cheyunhua/p/8671474.html
+python黑魔法
+https://mp.weixin.qq.com/s/x1xiilMvlD__6aiNWq7jrw
+结合nginx waf分享nginx防刷技巧
+https://mp.weixin.qq.com/s/HX2PfafV_sNggWP8Fj4cWg
+fastDFS文件服务器可以上传下载
+https://mp.weixin.qq.com/s/3--CTpQwhIgkFM40_O4Sog
+python试题必看
+https://mp.weixin.qq.com/s/mme6OPNM-QvOwuojwmU40g
+https://mp.weixin.qq.com/s/xcDTICDBtdeBISD5TWWICQ
+MySQL 必备工具使用的6个锦囊妙计！
+https://mp.weixin.qq.com/s/CQC429b6A1WpvJCUJOVqHg
+linux系统优化建议
+https://blog.csdn.net/codeTZ/article/details/52277980
+了解的工具值得看
+https://mp.weixin.qq.com/s/qC_XH_Mxqhq0CQESDf-7kQ
+自动化部署
+https://mp.weixin.qq.com/s/oECunyNXjMYzrsX8q_G_iA
+linux面试题
+https://mp.weixin.qq.com/s/1CpvwJug-rzFZb19IIt8Rg
+https://mp.weixin.qq.com/s/0nTVy2kL51IXGn-QLLJPpw
+tomcat技术文档
+https://mp.weixin.qq.com/s/4x5cnJwt28niblOb4dkm4w
+awk
+https://mp.weixin.qq.com/s/_O12r7KYISRUrHZlo3bnhw
+服务器被黑安全加固
+https://mp.weixin.qq.com/s/TNq9FgCMK57Ik8CNoGMxjA
+英语单词
+https://mp.weixin.qq.com/s/rYxa0bsR3TZsS6igg_ArGQ
+nginx高并发优化参考
+https://mp.weixin.qq.com/s/VJ0k88-hFJ5sofbHuSmAAw
+博客园主题
+https://www.cnblogs.com/hafiz/p/9276689.html
+硬盘恢复应用介绍
+https://mp.weixin.qq.com/s/mtLd4aLKQE7kJ7gFlkWb7g
+python爬虫
+https://mp.weixin.qq.com/s/tAu6kPvvkVBJ1dciQ_FvGg
