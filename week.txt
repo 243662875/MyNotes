@@ -1,3 +1,13 @@
+1、python
+2、kubernetes
+3、Jenkins
+4、ansible-playbook
+5、MQ,maven,redis,mysql,kafka,nginx,pinpoint
+6、ELK
+7、spring cloud
+8、zabbix，prometheus
+
+
 ## 调用链监控应用
 
 1、CAT：大众点评开源的一款调用链监控系统，基于JAVA开发的。有个很大的优势就是处理的实时性，CAT里大部分系统是分钟级统计。

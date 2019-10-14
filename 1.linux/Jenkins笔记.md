@@ -176,6 +176,103 @@ Manage Jenkins	>>	Configure System
 
 
 
+```shell
+pipeline {
+   agent any
+   tools { 
+        maven 'maventool'
+   }
+   stages {
+      stage ('初始化') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                ''' 
+            }
+        }
+     stage('拉取devops-common代码') {
+       steps {
+           sh "rm -rf *"
+           git branch: 'release-2.0', credentialsId: '7cb3c8ca-b916-49eb-95fc-be3b243c3a93', url: 'http://10.145.196.76:9080/Shtel-PaaS/Shtel-PaaS-DevOps/paas-devops-common.git'
+           sh 'git checkout v2.0.1' 
+        }
+     }
+     stage('maven构建devops-common包') {
+       steps {
+           sh "mvn clean deploy -DaltDeploymentRepository=paas::default::http://10.145.208.184:8082/repository/maven-snapshots/"
+       }
+     }
+
+   }
+}
+
+#----------------------------------------------------------------------------
+
+pipeline {
+   agent any
+   tools { 
+        maven 'maventool'
+   }
+   stages {
+      stage ('初始化') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                ''' 
+            }
+        }
+     stage('拉取代码') { // for display purposes
+       steps {
+           git branch: 'release-2.0', credentialsId: '7cb3c8ca-b916-49eb-95fc-be3b243c3a93', url: 'http://10.145.196.76:9080/Shtel-PaaS/Shtel-PaaS-DevOps/paas-devops-pipeline.git'
+           sh 'git checkout v2.0.1'     
+        }
+     }
+     stage('maven构建') {
+       steps {
+           // Run the maven build
+           sh "mvn clean -U package -Dmaven.test.skip=true"
+       }
+     }
+     stage('拉取部署剧本') { // for display purposes
+       steps {
+           sh "rm -rf paas-svc-k8s-deploy-playbook"
+           
+           dir("paas-svc-k8s-deploy-playbook") {
+               git branch: 'dev', credentialsId: '7cb3c8ca-b916-49eb-95fc-be3b243c3a93', url: 'http://10.145.196.76:9080/configserver/paas-svc-k8s-deploy-playbook.git'
+            //   sh 'git checkout v0.1'
+           }
+        }
+     }
+     stage('拉取配置集'){  // for desplay purposes
+      steps {
+        sh "rm -rf deploy_config_set"
+        dir("deploy_config_set"){
+          git branch: 'dev', credentialsId: '7cb3c8ca-b916-49eb-95fc-be3b243c3a93', url: 'http://10.145.196.76:9080/configserver/deploy_config_set'
+        }
+      }
+     }
+     stage('放置发布包') {
+       steps {
+           sh "cp target/*.tar.gz paas-svc-k8s-deploy-playbook/roles/paas-svc/files"
+       }
+     }
+     stage('根据包，修改脚本中的版本号'){
+      steps{
+         sh "sh paas-svc-k8s-deploy-playbook/roles/paas-svc/templates/set_version.sh"
+      }
+     }
+     stage('执行部署') {
+       steps {
+         ansiblePlaybook credentialsId: 'paas-ce-77', extras: '--extra-vars=\'@./deploy_config_set/paas-devops-pipeline/dev.yml\' -e "env=dev"', installation: 'ansible-playbook', inventory: 'paas-svc-k8s-deploy-playbook/inventory/inventory', playbook: 'paas-svc-k8s-deploy-playbook/playbooks/deploy-dev-k8s.yml'
+       }
+     }
+   }
+}
+
+```
+
 
 
 

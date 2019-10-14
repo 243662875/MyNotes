@@ -18,6 +18,9 @@ lsof -i :port
 #查看进程打开的文件数
 lsof -n|awk '{print $2}'|sort|uniq -c|sort -nr|more
 
+#利用ss 命令 统计出每个客户端和服务器建立了多少连接
+Alias ss2=Ss –ant | grep 1025 | grep EST | awk –F: “{print \$8}” | sort | uniq –c’
+
 #2.查看系统运行多长时间
 uptime -p
 
@@ -283,5 +286,17 @@ TIME_WAIT 1057  # 表示处理完毕，等待超时结束的请求数；
 　　tail -9 /etc/passwd | head -1 | cut -d: -f1,7 | tee /tmp/users
 23、显示/etc目录下所有以pa开头的文件，并统计其个数；
 　　ls -d /etc/pa* | wc -l
+
+```
+
+## 关于查找文件
+
+```shell
+ls -ltr ~/bin | tail -3		#列出最近创建或更新的文件
+ls -al --time-style=+%D | grep `date +%D`	#列出今天更新的文件
+
+ find . -not -path '*/\.*' -type f -mtime -1 -ls	#显示最近一天 （-mtime -1）更新过的文件
+ 
+ du -kx | egrep -v "\./.+/" | sort -n | tail -5		#
 ```
 
